@@ -1,4 +1,4 @@
-# jwt
+# JSON Web Token (JWT) trial application
 
 This trial application setup (https://blog.yannickjaquier.com/mariadb/json-web-token-jwt-with-vue-js-fastapi-and-mariadb.html):
 - a MariadB databse small data model
