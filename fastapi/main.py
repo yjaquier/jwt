@@ -7,7 +7,7 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 from fastapi import Depends, FastAPI, Body, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 
 SECRET_KEY = "your_secret_key_long_enough_to_satisfy_requirement" # 32 characters minimum
@@ -183,13 +183,12 @@ async def login(form_data: Annotated[LoginUser, Body()]) -> dict:
 # Non required part to handle Todo lists
 @app.get("/todos")
 async def get_todos(token: Annotated[str, Depends(oauth2_scheme)]) -> dict:
-  credentials_exception = HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Could not validate credentials", headers = {"WWW-Authenticate": "Bearer"})
   try:
     payload = jwt.decode(jwt = token, key = SECRET_KEY, algorithms = [ALGORITHM])
     # print(payload)
     users_id = payload.get("id")
     if users_id is None:
-      raise credentials_exception
+      raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = {"Code": 20001 , "Error": "Invalid username"}, headers = {"WWW-Authenticate": "Bearer"})
     connection01 = getMariaDBConnection()
     cursor01 = getMariaDBCursor(connection01)
     sql01 = 'select id, item from todos where users_id = ' + str(users_id)
@@ -204,6 +203,8 @@ async def get_todos(token: Annotated[str, Depends(oauth2_scheme)]) -> dict:
     return JSONResponse(content = data)
   except mariadb.Error as e:
     raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail= {"registerStatus": "Failed", "Code": e.errno ,"Error": str(e)} )
+  except InvalidTokenError as e:
+    raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = {"Code": 20001 , "Error": "Invalid token"}, headers = {"WWW-Authenticate": "Bearer"})
 
 @app.post("/todos")
 async def create_todo(form_data: Annotated[Todo, Body()], token: Annotated[str, Depends(oauth2_scheme)]) -> dict:
@@ -215,7 +216,7 @@ async def create_todo(form_data: Annotated[Todo, Body()], token: Annotated[str, 
     connection01 = getMariaDBConnection()
     cursor01 = getMariaDBCursor(connection01)
     sql01 = 'insert into todos(id, users_id, item) select a.*, '+ str(users_id) + ', "' + item + '" from (select max(id)+1 from todos where users_id=1) a'
-    print(sql01)
+    # print(sql01)
     cursor01.execute(sql01)
     # Commit
     connection01.commit()
@@ -225,7 +226,8 @@ async def create_todo(form_data: Annotated[Todo, Body()], token: Annotated[str, 
     return JSONResponse(content = { "Insert": "Success" })
   except mariadb.Error as e:
     raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail= {"Insert": "Failed", "Code": e.errno , "Error": str(e)} )
-
+  except InvalidTokenError as e:
+    raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = {"Code": 20001 , "Error": "Invalid token"}, headers = {"WWW-Authenticate": "Bearer"})
 
 @app.delete("/todos/{todo_id}")
 async def delete_todo(form_data: Annotated[TodoId, Body()], token: Annotated[str, Depends(oauth2_scheme)]) -> dict:
@@ -237,7 +239,7 @@ async def delete_todo(form_data: Annotated[TodoId, Body()], token: Annotated[str
     connection01 = getMariaDBConnection()
     cursor01 = getMariaDBCursor(connection01)
     sql01 = 'delete from todos where id = ' + str(id) + ' and users_id = ' + str(users_id)
-    print(sql01)
+    # print(sql01)
     cursor01.execute(sql01)
     # Commit
     connection01.commit()
@@ -247,3 +249,5 @@ async def delete_todo(form_data: Annotated[TodoId, Body()], token: Annotated[str
     return JSONResponse(content = { "Delete": "Success" })
   except mariadb.Error as e:
     raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail= {"Delete": "Failed", "Code": e.errno , "Error": str(e)} )
+  except InvalidTokenError as e:
+    raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = {"Code": 20001 , "Error": "Invalid token"}, headers = {"WWW-Authenticate": "Bearer"})

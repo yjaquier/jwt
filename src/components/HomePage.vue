@@ -19,7 +19,7 @@ const fullname = ref(null)
 async function getUserInformation(): Promise<object[] | object> {
   return await fetch('http://localhost:8181/', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
   }).then(response => {
     // console.log(response)
     if (!response.ok) {
@@ -63,12 +63,12 @@ function logout() {
 
     <fieldset class="flex-container">
       <legend>User Information</legend>
-      <label>
+      <div>
         <span>Authenticated ?: {{ isAuthenticated }}</span>
-      </label>
-      <label v-if="fullname !== null">
+      </div>
+      <div v-if="fullname !== null">
         <span>How are you {{ fullname }} today ?</span>
-      </label>
+      </div>
       <div v-if="!isAuthenticated">
         <button @click="$router.push('/register')">Register</button>
         <button @click="$router.push('/login')">Login</button>

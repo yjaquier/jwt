@@ -21,7 +21,7 @@ async function get_todos(): Promise<object[] | object> {
   // data.append('password', loginForm.value.password)
   return await fetch('http://localhost:8181/todos', {
     method: 'GET',
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
   }).then(async response => {
     // console.log(response)
     if (!response.ok) {
@@ -54,7 +54,7 @@ async function create_todo(): Promise<object[] | object> {
   // data.append('password', loginForm.value.password)
   return await fetch('http://localhost:8181/todos', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     body: JSON.stringify({ "item": item.value })
   }).then(async response => {
     // console.log(response)
@@ -75,7 +75,7 @@ async function create_todo(): Promise<object[] | object> {
   }).then(data => {
     // console.log(data)
     window.alert("Todo " + item.value + " inserted !")
-    get_todos() // We can do much better by getting, inretrun, the item id and modifying the reactive variable
+    get_todos() // We can do much better by getting, in retrun, the item id and modify the reactive variable
     return data
     }).catch(error => {
     console.log("Problem while running /todas (POST) fastAPI endpoint:\n", error)
@@ -89,7 +89,7 @@ async function delete_todo(id: number): Promise<object[] | object> {
   // data.append('password', loginForm.value.password)
   return await fetch('http://localhost:8181/todos/' + id, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
     body: JSON.stringify({ 'id': id })
   }).then(async response => {
     // console.log(response)
@@ -110,7 +110,7 @@ async function delete_todo(id: number): Promise<object[] | object> {
   }).then(data => {
     // console.log(data)
     window.alert("Todo " + id + " deleted !")
-    get_todos() // We can do much better by getting, inretrun, the item id and modifying the reactive variable
+    get_todos() // We can do much better by getting, in retrun, the item id and modify the reactive variable
     return data
     }).catch(error => {
     console.log("Problem while running /todas/{toto_id} (DELETE) fastAPI endpoint:\n", error)
@@ -130,25 +130,26 @@ onMounted(() => {
     </section>
 
     <fieldset class="flex-container">
-      <legend>insert todo in list</legend>
+      <legend>Insert todo in list</legend>
 
-      <label>
-        <span>Todo item: </span>
+      <div>
+        <label for="item">Todo item: </label>
         <input
+          id="item"
           v-model="item"
           required
           type="text"
         />
-      </label>
+      </div>
 
       <div>
         <button @click="create_todo">Create</button>
         <button @click="router.push('/')">Home</button>
       </div>
     </fieldset>
-    <fieldset>
+    <fieldset class="flex-container">
       <legend>Existing Todo(s)</legend>
-      <span v-if="todos.length != 0">
+      <div v-if="todos.length != 0">
         <table>
           <tr><th>Delete?</th><th>Id</th><th>Item</th></tr>
           <tr v-for="(todo) in todos" :key="todo.id">
@@ -162,7 +163,7 @@ onMounted(() => {
             <td>{{ todo.item }}</td>
           </tr>
         </table>
-      </span>
+      </div>
     </fieldset>
   </main>
 </template>

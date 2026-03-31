@@ -62,9 +62,10 @@ async function login(): Promise<object[] | object> {
     <fieldset class="flex-container">
       <legend>User login</legend>
 
-      <label>
-        <span>Username: </span>
+      <div>
+        <label for="username">Username: </label>
         <input
+          id="username"
           v-model="loginForm.username"
           autocomplete="username"
           name="username"
@@ -72,34 +73,34 @@ async function login(): Promise<object[] | object> {
           required
           type="text"
         />
-      </label>
-
-      <label>
-        <div v-if="showPassword">
-          <span>Password: </span>
-          <input 
-            v-model="loginForm.password"
-            autocomplete="current-password"
-            name="password"
-            placeholder="Enter a password"
-            required
-            type="password"
-          />
-          <font-awesome-icon icon="fa-regular fa-eye" @click="toggleShow" />
-        </div>
-        <div v-else>
-          <span>Password: </span>
-          <input
-            v-model="loginForm.password"
-            autocomplete="current-password"
-            name="password"
-            placeholder="Enter a password"
-            required
-            type="text"
-          />
-          <font-awesome-icon icon="fa-regular fa-eye-slash" @click="toggleShow" />
-        </div> 
-      </label>
+      </div>
+      
+      <div v-if="showPassword">
+        <label for="password">Password: </label>
+        <input
+          id="password"
+          v-model="loginForm.password"
+          autocomplete="current-password"
+          name="password"
+          placeholder="Enter a password"
+          required
+          type="password"
+        />
+        <font-awesome-icon icon="fa-regular fa-eye" @click="toggleShow" />
+      </div>
+      <div v-else>
+        <label for="password">Password: </label>
+        <input
+          id="password"
+          v-model="loginForm.password"
+          autocomplete="current-password"
+          name="password"
+          placeholder="Enter a password"
+          required
+          type="text"
+        />
+        <font-awesome-icon icon="fa-regular fa-eye-slash" @click="toggleShow" />
+      </div> 
 
       <div>
         <button @click="login">Login</button>

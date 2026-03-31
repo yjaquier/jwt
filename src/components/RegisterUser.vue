@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome' // Import font awesome icon component
+
+const router = useRouter()
 
 const registrationForm = ref({
   firstname: 'Yannick',
@@ -43,6 +46,8 @@ async function register(): Promise<object[] | object> {
     }
   }).then(data => {
     console.log(data)
+    window.alert("Registration successful !")
+    router.push('/login')
     return data
   }).catch(error => {
     console.log('Problem while running /register fastAPI endpoint:\n', error);
@@ -62,9 +67,10 @@ async function register(): Promise<object[] | object> {
       <fieldset class="flex-container">
         <legend>User registration</legend>
 
-        <label>
-          <span>Firstname: </span>
+        <div>
+          <label for="firstname">Firstname: </label>
           <input
+            id="firstname"
             v-model="registrationForm.firstname"
             autocomplete="given-name"
             name="firstname"
@@ -72,11 +78,12 @@ async function register(): Promise<object[] | object> {
             required
             type="text"
           />
-        </label>
+        </div>
 
-        <label>
-          <span>Lastname: </span>
+        <div>
+          <label for="lastname">Lastname: </label>
           <input
+            id="lastname"
             v-model="registrationForm.lastname"
             autocomplete="family-name"
             name="lastname"
@@ -84,11 +91,12 @@ async function register(): Promise<object[] | object> {
             required
             type="text"
           />
-        </label>
+        </div>
 
-        <label>
-          <span>Username: </span>
+        <div>
+          <label for="username">Username: </label>
           <input
+            id="username"
             v-model="registrationForm.username"
             autocomplete="username"
             name="username"
@@ -96,35 +104,35 @@ async function register(): Promise<object[] | object> {
             required
             type="text"
           />
-        </label>
+        </div>
 
-        <label>
-          <div v-if="showPassword">
-            <span>Password: </span>
-            <input 
-              v-model="registrationForm.password"
-              autocomplete="current-password"
-              name="password"
-              placeholder="Enter a password"
-              required
-              type="password"
-            />
-            <font-awesome-icon icon="fa-regular fa-eye" @click="toggleShow" />
-          </div>
-          <div v-else>
-            <span>Password: </span>
-            <input
-              v-model="registrationForm.password"
-              autocomplete="current-password"
-              name="password"
-              placeholder="Enter a password"
-              required
-              type="text"
-            />
-            <font-awesome-icon icon="fa-regular fa-eye-slash" @click="toggleShow" />
-          </div> 
-        </label>
-
+        <div v-if="showPassword">
+          <label for="password">Password: </label>
+          <input
+            id="password"
+            v-model="registrationForm.password"
+            autocomplete="current-password"
+            name="password"
+            placeholder="Enter a password"
+            required
+            type="password"
+          />
+          <font-awesome-icon icon="fa-regular fa-eye" @click="toggleShow" />
+        </div>
+        <div v-else>
+          <label for="password">Password: </label>
+          <input
+            id="password"
+            v-model="registrationForm.password"
+            autocomplete="current-password"
+            name="password"
+            placeholder="Enter a password"
+            required
+            type="text"
+          />
+          <font-awesome-icon icon="fa-regular fa-eye-slash" @click="toggleShow" />
+        </div> 
+       
         <div>
           <button @click="register">Register</button>
           <button @click="$router.push('/login')">Login</button>

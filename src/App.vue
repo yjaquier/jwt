@@ -40,8 +40,9 @@ button {
   justify-content: center;
   align-items: center;
 }
-.flex-container label {
-  width: 30rem;
+
+.flex-container div {
+  width: 40rem;
   margin: 10px;
   padding: 10px;
   text-align: center;  
@@ -54,7 +55,7 @@ table, tr, th, td {
 }
 
 table {
-  width: 50%;
+  width: 100%;
 }
 
 </style>

@@ -1,6 +1,11 @@
 # jwt
 
-This template should help get you started developing with Vue 3 in Vite.
+This trial application setup (https://blog.yannickjaquier.com/mariadb/json-web-token-jwt-with-vue-js-fastapi-and-mariadb.html):
+- a MariadB databse small data model
+- a backend Rest API made with FastAPI
+- a frontend made with Vuejs
+
+And provide a template to handle a JSON Web Token (JWT) authorization
 
 ## Recommended IDE Setup
 
@@ -14,10 +19,6 @@ This template should help get you started developing with Vue 3 in Vite.
 - Firefox:
   - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
   - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
 
 ## Customize configuration
 
